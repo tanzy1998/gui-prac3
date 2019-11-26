@@ -10,7 +10,7 @@
 #define WINDOW_TITLE "Practical 3"
 float spd = 0, acc = 0, lvl = 0;
 float left = 0.0, right = 0.0, up = 0.0, down = 0.0;
-int page = 0, noOfFan =4;
+int page = 0, noOfFan = 4;
 float rotatedegree = 0.0;
 void body();
 void circle(float x, float y, float radius);
@@ -57,21 +57,21 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			break;
 
 		case VK_LEFT:
-			if (acc < 0.5)
+			if (spd < 0.5)
 			{
-				acc -= 0.05f;
+				spd -= 0.05f;
 			}
 			break;
 
 		case VK_RIGHT:
-			if (acc > -0.5)
+			if (spd > -0.5)
 			{
-				acc += 0.05f;
+				spd += 0.05f;
 			}
 			break;
 
 		case VK_SPACE:
-			acc = 0.00f;
+			spd = 0.00f;
 			down = 0.0;
 			up = 0.0;
 			left = 0.0;
@@ -86,7 +86,7 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		case VK_F2:
 			page = 2;
 			break;
-			
+
 		case VK_ADD:
 			if (noOfFan < 6) {
 				noOfFan += 1;
@@ -164,7 +164,7 @@ void demo() {
 
 void redRectangle() {
 	glClear(GL_COLOR_BUFFER_BIT);
-	
+
 	glColor3f(1, 0, 0);
 	glLoadIdentity();
 
@@ -205,7 +205,7 @@ void circle(float x, float y, float radius) {
 
 	float x1 = x, y1 = y;
 	float angle = 0.0;
-	
+
 	glBegin(GL_TRIANGLE_FAN);
 	glColor3ub(102, 51, 0);
 	glVertex2f(x1, y1);
@@ -263,7 +263,7 @@ void sun(float x_trans, float y_trans) {
 	glEnd();
 }
 
-void drawfan(int noOfFan, float acc) {
+void drawfan(int noOfFan, float spd) {
 	float degree = 360 / noOfFan;
 	for (int i = 0; i < noOfFan; i++) {
 
@@ -277,7 +277,7 @@ void drawfan(int noOfFan, float acc) {
 		fansword();
 		glPopMatrix();
 
-		rotatedegree = rotatedegree - degree - acc;
+		rotatedegree = fmod((rotatedegree - degree - spd),360.0f);
 	}
 }
 
@@ -317,9 +317,10 @@ void bird(float x_trans, float y_trans) {
 	glVertex2f(-0.15, 0.2);
 	glEnd();
 }
+
 void windwheel() {
 	glClear(GL_COLOR_BUFFER_BIT);
-	
+
 
 	glLoadIdentity();
 	sun(0.8f, 0.8f);
@@ -337,7 +338,7 @@ void windwheel() {
 	body();
 
 	drawfan(noOfFan, acc);
-	
+
 	glPushMatrix();
 	circle(0, 0, 0.05);
 	glPopMatrix();
@@ -346,7 +347,7 @@ void windwheel() {
 
 void display()
 {
-	
+
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClearColor(0, 0, 0, 0);
 	switch (page)
@@ -361,7 +362,7 @@ void display()
 	default:
 		break;
 	}
-	
+
 }
 //--------------------------------------------------------------------
 
@@ -417,6 +418,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE prevInstance,
 			DispatchMessage(&msg);
 		}
 
+		rotatedegree += spd;
 		display();
 
 		SwapBuffers(hdc);
