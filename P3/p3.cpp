@@ -10,7 +10,7 @@
 #define WINDOW_TITLE "Practical 3"
 float spd = 0, acc = 0, lvl = 0;
 float left = 0.0, right = 0.0, up = 0.0, down = 0.0;
-int page = 0, noOfFan = 4;
+int page = 1, noOfFan = 4;
 float rotatedegree = 0.0;
 void body();
 void circle(float x, float y, float radius);
